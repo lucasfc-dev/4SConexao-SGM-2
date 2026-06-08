@@ -1,0 +1,43 @@
+[tool.poetry]
+name = "auth_api"
+version = "0.1.0"
+description = ""
+authors = ["lucasfc-dev <127855437+lucasfc-dev@users.noreply.github.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+setuptools = "*"
+python = "^3.11"
+fastapi = "^0.115.0"
+pydantic-settings = "^2.3.4"
+uvicorn = "^0.31.0"
+tortoise-orm = "^0.21.5"
+python-multipart = "^0.0.12"
+comtypes = "^1.4.7"
+python-dotenv = "^1.0.1"
+requests = "^2.32.3"
+asyncpg = "^0.29.0"
+tzdata = "^2024.2"
+pyjwt = "^2.8.0"
+cryptography = "^42.0.5"
+aerich = "^0.8.0"
+tomlkit = "^0.13.2"
+httpx = "^0.28.1"
+
+[tool.poetry.dependencies.pwdlib]
+extras = ["argon2"]
+version = "^0.2.0"
+
+[tool.poetry.dependencies.pydantic]
+extras = ["email"]
+version = "^2.9.2"
+
+[tool.aerich]
+tortoise_orm = "api.config.TORTOISE_CONFIG"
+location = "./migrations"
+src_folder = "./."
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

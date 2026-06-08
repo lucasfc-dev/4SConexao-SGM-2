@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "pdf_service"
+version = "0.1.0"
+description = "Repositório de múltiplos microserviços para 4SConexao-SGM"
+authors = ["Lucas Franco <127855437+lucasfc-dev@users.noreply.github.com>"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.115.0"
+uvicorn = "^0.31.0"
+aiofiles = "^24.1.0"
+babel = "^2.16.0"
+erpbrasil-assinatura = "^1.7.0"
+pypdf2 = "^3.0.1"
+endesive = "^2.17.3"
+pydantic-settings = "^2.3.4"
+tortoise-orm = "^0.21.5"
+python-multipart = "^0.0.12"
+reportlab = "^4.2.5"
+comtypes = "^1.4.7"
+python-docx = "^1.1.2"
+pillow = "^10.4.0"
+python-dotenv = "^1.0.1"
+requests = "^2.32.3"
+jinja2 = "^3.1.4"
+psycopg2-binary = "^2.9.5"
+tzdata = "^2024.2"
+oscrypto = {url = "https://github.com/wbond/oscrypto/archive/d5f3437ed24257895ae1edd9e503cfb352e635a8.zip"}
+aerich = "^0.8.1"
+tomlkit = "^0.13.2"
+httpx = "^0.28.1"
+pdfplumber = "^0.11.6"
+pymupdf = "^1.26.3"
+asyncpg = "^0.30.0"
+qrcode = "^8.2"
+numpy = "^2.3.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+

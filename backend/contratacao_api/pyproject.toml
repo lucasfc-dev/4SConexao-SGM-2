@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "contratacao-api"
+version = "0.1.0"
+description = ""
+authors = ["Lucas Franco <127855437+lucasfc-dev@users.noreply.github.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.115.12"
+uvicorn = "^0.34.2"
+tortoise-orm = "^0.25.0"
+dotenv = "^0.9.9"
+httpx = "^0.28.1"
+asyncpg = "^0.30.0"
+python-multipart = "^0.0.20"
+aerich = "^0.9.1"
+pandas = "^2.3.1"
+lxml = "^6.0.0"
+num2words = "^0.5.14"
+babel = "^2.17.0"
+apscheduler = "^3.11.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+
+[tool.aerich]
+
+tortoise_orm = "api.config.TORTOISE_CONFIG"
+
+location = "./migrations"
+
+src_folder = "./."
+

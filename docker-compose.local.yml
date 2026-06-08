@@ -1,0 +1,243 @@
+services:
+
+
+  auth_db:
+    image: postgres:14
+    container_name: auth_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${AUTH_DB}
+    ports:
+      - "5430:5432"
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+
+  auth_api:
+    build:
+      context: ./backend/auth_api
+      dockerfile: Dockerfile
+    container_name: auth_api
+    env_file:
+      - ./backend/.env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "8001:8001"
+    depends_on:
+      - auth_db
+    volumes:
+      - auth_api_logs:/var/log/auth_api
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}          
+    ports:
+      - "5050:80"                             
+    depends_on:
+      - auth_db
+  
+  doem_db:
+    image: postgres:14
+    container_name: doem_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${DOEM_DB}
+    ports:
+      - "5431:5432"
+    volumes:
+      - doem_db_data:/var/lib/postgresql/data
+  
+  doem_api:
+    build:
+      context: ./backend/doem_api
+      dockerfile: Dockerfile
+    container_name: doem_api
+    env_file:
+      - ./backend/.env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - doem_db
+
+  email_api:
+    build:
+      context: ./backend/email_microservice
+      dockerfile: Dockerfile
+    container_name: email_api
+    env_file:
+      - ./backend/.env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "8002:8002"
+   
+  ged_db:
+    image: postgres:14
+    container_name: ged_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${GED_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ged_db_data:/var/lib/postgresql/data 
+
+  ged_api:
+    build:
+      context: ./backend/ged_api
+      dockerfile: Dockerfile
+    container_name: ged_api
+    env_file:
+      - ./backend/.env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "8003:8003"
+    depends_on:
+      - ged_db
+
+  contratacao_api:
+    build:
+      context: ./backend/contratacao_api
+      dockerfile: Dockerfile
+    container_name: contratacao_api
+    env_file:
+      - ./backend/.env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "8004:8004"
+    depends_on:
+      - contratacao_db
+    volumes:
+      - ./backend/contratacao_api/migrations:/app/migrations
+
+  contratacao_db:
+    image: postgres:14
+    container_name: contratacao_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${CONTRATACAO_DB}
+    ports:
+      - "5433:5432"
+    volumes:
+      - contratacao_db_data:/var/lib/postgresql/data
+
+  ouvidoria_api:
+    build:
+      context: ./backend/ouvidoria_api
+      dockerfile: Dockerfile
+    container_name: ouvidoria_api
+    env_file:
+      - ./backend/.env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "8005:8005"
+    depends_on:
+      - ouvidoria_db
+    volumes:
+      - ./backend/ouvidoria_api/migrations:/app/migrations
+
+  ouvidoria_db:
+    image: postgres:14
+    container_name: ouvidoria_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${OUVIDORIA_DB}
+    ports:
+      - "5434:5432"
+    volumes:
+      - ouvidoria_db_data:/var/lib/postgresql/data
+
+  pdf_service:
+    build:
+      context: ./backend/pdf_service
+      dockerfile: Dockerfile
+    container_name: pdf_service
+    env_file:
+      - ./backend/.env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "8006:8006"
+    depends_on:
+      - auth_api
+    volumes:
+      - ./backend/pdf_service/api/files:/app/api/files
+
+  transparencia_api:
+    build:
+      context: ./backend/transparencia_api
+      dockerfile: Dockerfile
+    container_name: transparencia_api
+    env_file:
+      - ./backend/.env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "8007:8007"
+    depends_on:
+      - transparencia_db
+    volumes:
+      - ./backend/transparencia_api/migrations:/app/migrations
+
+  transparencia_db:
+    image: postgres:14
+    container_name: transparencia_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${TRANSPARENCIA_DB}
+    ports:
+      - "5435:5432"
+    volumes:
+      - transparencia_db_data:/var/lib/postgresql/data
+
+  acervo_api:
+    build:
+      context: ./backend/acervo_api
+      dockerfile: Dockerfile
+    container_name: acervo_api
+    env_file:
+      - ./backend/.env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "8008:8008"
+    depends_on:
+      - acervo_db
+    volumes:
+      - ./backend/acervo_api/migrations:/app/migrations
+
+  acervo_db:
+    image: postgres:14
+    container_name: acervo_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${ACERVO_DB}
+    ports:
+      - "5436:5432"
+    volumes:
+      - acervo_db_data:/var/lib/postgresql/data
+
+volumes:
+  auth_db_data:
+  auth_api_logs:
+  doem_db_data:
+  ged_db_data:
+  contratacao_db_data:
+  ouvidoria_db_data:
+  transparencia_db_data:
+  acervo_db_data:

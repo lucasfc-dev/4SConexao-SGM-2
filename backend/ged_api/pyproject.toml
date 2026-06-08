@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "ged-api"
+version = "0.1.0"
+description = ""
+authors = ["Lucas Franco <127855437+lucasfc-dev@users.noreply.github.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.115.8"
+tortoise-orm = "^0.24.0"
+python-dotenv = "^1.0.1"
+uvicorn = "^0.34.0"
+requests = "^2.32.3"
+asyncpg = "^0.30.0"
+python-multipart = "^0.0.20"
+pydantic = ">=2.0"
+erpbrasil-assinatura = "^1.7.0"
+endesive = "^2.18.5"
+httpx = "^0.28.1"
+cryptography = "^45.0.2"
+pandas = "^2.3.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

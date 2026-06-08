@@ -1,0 +1,260 @@
+version: "3.9"
+
+services:
+
+  frontend:
+    build: ./frontend
+    image: frontend:latest
+    container_name: next_frontend
+    env_file:
+      - ./frontend/.env.local
+    networks:
+      - proxy_net
+
+  auth_db:
+    image: postgres:14
+    container_name: auth_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${AUTH_DB}
+    ports:
+      - "127.0.0.1:5430:5432"
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+    networks:
+      - proxy_net
+
+  auth_api:
+    build: ./backend/auth_api
+    image: auth_api:latest
+    container_name: auth_api
+    env_file:
+      - /home/ubuntu/Diario/backend/.env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "127.0.0.1:8001:8001"
+    depends_on:
+      - auth_db
+    volumes:
+      - auth_api_logs:/var/log/auth_api
+      - ./backend/auth_api/migrations:/app/migrations
+    networks:
+      - proxy_net
+
+  doem_db:
+    image: postgres:14
+    container_name: doem_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${DOEM_DB}
+    ports:
+      - "127.0.0.1:5431:5432"
+    volumes:
+      - doem_db_data:/var/lib/postgresql/data
+    networks:
+      - proxy_net
+
+  doem_api:
+    build: ./backend/doem_api
+    image: doem_api:latest
+    container_name: doem_api
+    env_file:
+      - /home/ubuntu/Diario/backend/.env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      - doem_db
+    volumes:
+      - ./backend/doem_api/migrations:/app/migrations
+    networks:
+      - proxy_net
+
+  email_api:
+    build: ./backend/email_microservice
+    image: email_api:latest
+    container_name: email_api
+    env_file:
+      - /home/ubuntu/Diario/backend/.env
+    ports:
+      - "127.0.0.1:8002:8002"
+    environment:
+      TZ: ${TZ}
+    networks:
+      - proxy_net
+
+  ged_db:
+    image: postgres:14
+    container_name: ged_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${GED_DB}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - ged_db_data:/var/lib/postgresql/data
+    networks:
+      - proxy_net
+
+  ged_api:
+    build: ./backend/ged_api
+    container_name: ged_api
+    env_file:
+      - /home/ubuntu/Diario/backend/.env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "127.0.0.1:8003:8003"
+    depends_on:
+      - ged_db
+    networks:
+      - proxy_net
+
+  contratacao_db:
+    image: postgres:14
+    container_name: contratacao_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${CONTRATACAO_DB}
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - contratacao_db_data:/var/lib/postgresql/data
+    networks:
+      - proxy_net
+
+  contratacao_api:
+    build: ./backend/contratacao_api
+    container_name: contratacao_api
+    env_file:
+      - /home/ubuntu/Diario/backend/.env
+    ports:
+      - "127.0.0.1:8004:8004"
+    environment:
+      TZ: ${TZ}
+    depends_on:
+      - contratacao_db
+    networks:
+      - proxy_net
+
+  ouvidoria_api:
+    build: ./backend/ouvidoria_api
+    container_name: ouvidoria_api
+    env_file:
+      - /home/ubuntu/Diario/backend/.env
+    ports:
+      - "127.0.0.1:8005:8005"
+    environment:
+      TZ: ${TZ}
+    depends_on:
+      - ouvidoria_db
+    networks:
+      - proxy_net
+
+  ouvidoria_db:
+    image: postgres:14
+    container_name: ouvidoria_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${OUVIDORIA_DB}
+    ports:
+      - "127.0.0.1:5434:5432"
+    volumes:
+      - ouvidoria_db_data:/var/lib/postgresql/data
+    networks:
+      - proxy_net
+
+
+  pdf_service:
+    build: ./backend/pdf_service
+    container_name: pdf_service
+    env_file:
+      - /home/ubuntu/Diario/backend/.env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "127.0.0.1:8006:8006"
+    depends_on:
+      - auth_api
+    networks:
+      - proxy_net
+
+  transparencia_api:
+    build: ./backend/transparencia_api
+    container_name: transparencia_api
+    env_file:
+      - /home/ubuntu/Diario/backend/.env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "127.0.0.1:8007:8007"
+    depends_on:
+      - transparencia_db
+    networks:
+      - proxy_net
+
+  transparencia_db:
+    image: postgres:14
+    container_name: transparencia_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${TRANSPARENCIA_DB}
+    ports:
+      - "127.0.0.1:5435:5432"
+    volumes:
+      - transparencia_db_data:/var/lib/postgresql/data
+    networks:
+      - proxy_net
+
+
+  acervo_api:
+    build: ./backend/acervo_api
+    container_name: acervo_api
+    env_file:
+      - /home/ubuntu/Diario/backend/.env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "127.0.0.1:8008:8008"
+    depends_on:
+      - acervo_db
+    networks:
+      - proxy_net
+      
+  acervo_db:
+    image: postgres:14
+    container_name: acervo_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${ACERVO_DB}
+    ports:
+      - "127.0.0.1:5436:5432"
+    volumes:
+      - acervo_db_data:/var/lib/postgresql/data
+    networks:
+      - proxy_net
+
+volumes:
+  auth_db_data:
+  auth_api_logs:
+  doem_db_data:
+  ged_db_data:
+  contratacao_db_data:
+  ouvidoria_db_data:
+  transparencia_db_data:
+  acervo_db_data:
+  certbot_certs:
+  certbot_www:
+
+networks:
+  proxy_net:
+    external: true
